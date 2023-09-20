@@ -1,0 +1,11 @@
+.vscode/ 
+*.exe
+
+.env
+.env.production
+.env.development
+.env.test
+.env.local
+.env.backup
+
+/vendor
