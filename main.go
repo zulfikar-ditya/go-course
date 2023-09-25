@@ -10,8 +10,8 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	"github.com/zulfikar-ditya/go-course/internal/database"
-	_"github.com/lib/pq"
 )
 
 type APIConfig struct {
@@ -61,6 +61,9 @@ func main() {
 	v1Router.Get("/test", handlerReadiness)
 	v1Router.Get("/error", handlerErr)
 	v1Router.Post("/users", apiConfig.handleCreateNewUser)
+	v1Router.Get("/user", apiConfig.authMiddleware(apiConfig.handlerUsersGet))
+	v1Router.Post("/feeds", apiConfig.authMiddleware(apiConfig.handleCreateNewFeed))
+	v1Router.Get("/feeds", apiConfig.authMiddleware(apiConfig.handleGetFeeds))
 	
 	router.Mount("/v1", v1Router)
 	

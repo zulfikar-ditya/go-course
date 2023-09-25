@@ -41,3 +41,7 @@ func (APIConfig *APIConfig) handleCreateNewUser(w http.ResponseWriter, r *http.R
 
 	responseWithJson(w, http.StatusOK, user)
 }
+
+func (cfg *APIConfig) handlerUsersGet(w http.ResponseWriter, r *http.Request, user database.User) {
+	responseWithJson(w, http.StatusOK, database.User(user))
+}
