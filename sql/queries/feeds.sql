@@ -1,16 +1,20 @@
 -- name: CreateNewFeed :one
 INSERT INTO feeds (id, user_id, url, name, created_at, updated_at) 
 VALUES ($1, $2, $3, $4, $5, $6) 
-RETURNING id, user_id, url, name, created_at, updated_at;
+RETURNING *;
 
 -- name: GetFeedById :one
-SELECT id, user_id, url, name, created_at, updated_at FROM feeds WHERE id = $1;
+SELECT * FROM feeds WHERE id = $1;
 
 -- name: GetFeeds :many
-SELECT id, user_id, url, name, created_at, updated_at FROM feeds ORDER BY created_at DESC;
+SELECT * FROM feeds ORDER BY created_at DESC;
 
--- name: GetFeedByUserId
-/* SELECT id, user_id, url, name, created_at, updated_at FROM feeds WHERE user_id = $1;
+-- name: GetNextFeedToFetch :one
+SELECT * FROM feeds ORDER BY last_fetch_at DESC NULLS FIRST LIMIT 1;
 
--- name: GetFeedByUrl
-SELECT id, user_id, url, name, created_at, updated_at FROM feeds WHERE url = $1; */
+-- name: UpdateLastFetchFeed :one
+UPDATE feeds SET 
+last_fetch_at = NOW(),
+updated_at = NOW()
+WHERE id = $1
+RETURNING *;
